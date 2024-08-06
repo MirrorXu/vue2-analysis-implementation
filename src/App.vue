@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
+    <User
+      :name="username"
+      :gender="userGender"
+      :avatar="userAvatar"
+      @click.native="changeName"
+    ></User>
   </div>
 </template>
 
@@ -30,3 +31,26 @@ nav {
   }
 }
 </style>
+<script>
+let num = 0;
+import User from "@/components/user.vue";
+export default {
+  name: "App",
+  components: {
+    User,
+  },
+  data() {
+    return {
+      username: "MirrorXu",
+      userGender: 2,
+      userAvatar:
+        "https://cdn.pixabay.com/photo/2021/07/19/04/36/woman-6477171_1280.jpg",
+    };
+  },
+  methods: {
+    changeName() {
+      this.username = this.username + Number(++num);
+    },
+  },
+};
+</script>

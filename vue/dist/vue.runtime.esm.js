@@ -5,8 +5,8 @@ log.success("本地vue引入成功");
  * (c) 2014-2023 Evan You
  * Released under the MIT License.
  */
-var emptyObject = Object.freeze({});
-var isArray = Array.isArray;
+let emptyObject = Object.freeze({});
+let isArray = Array.isArray;
 // These helpers produce better VM code in JS engines due to their
 // explicitness and function inlining.
 function isUndef(v) {
@@ -47,7 +47,7 @@ function isObject(obj) {
 /**
  * Get the raw type string of a value, e.g., [object Object].
  */
-var _toString = Object.prototype.toString;
+let _toString = Object.prototype.toString;
 function toRawType(value) {
   return _toString.call(value).slice(8, -1);
 }
@@ -2891,10 +2891,9 @@ function renderMixin(Vue) {
     return nextTick(fn, this);
   };
   Vue.prototype._render = function () {
-    var vm = this;
-    var _a = vm.$options,
-      render = _a.render,
-      _parentVnode = _a._parentVnode;
+    const vm = this;
+    const { render, _parentVnode } = vm.$options;
+
     if (_parentVnode && vm._isMounted) {
       vm.$scopedSlots = normalizeScopedSlots(
         vm.$parent,
@@ -4085,10 +4084,10 @@ function initLifecycle(vm) {
 }
 function lifecycleMixin(Vue) {
   Vue.prototype._update = function (vnode, hydrating) {
-    var vm = this;
-    var prevEl = vm.$el;
-    var prevVnode = vm._vnode;
-    var restoreActiveInstance = setActiveInstance(vm);
+    const vm = this;
+    const prevEl = vm.$el;
+    const prevVnode = vm._vnode;
+    const restoreActiveInstance = setActiveInstance(vm);
     vm._vnode = vnode;
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
@@ -4107,8 +4106,9 @@ function lifecycleMixin(Vue) {
     if (vm.$el) {
       vm.$el.__vue__ = vm;
     }
+
     // if parent is an HOC, update its $el as well
-    var wrapper = vm;
+    let wrapper = vm;
     while (
       wrapper &&
       wrapper.$vnode &&
@@ -7758,15 +7758,19 @@ function createPatchFunction(backend) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode);
       return;
     }
-    var isInitialPatch = false;
-    var insertedVnodeQueue = [];
+    let isInitialPatch = false;
+    let insertedVnodeQueue = [];
+
     if (isUndef(oldVnode)) {
+      // oldVnode不存在
       // empty mount (likely as component), create new root element
       isInitialPatch = true;
       createElm(vnode, insertedVnodeQueue);
     } else {
-      var isRealElement = isDef(oldVnode.nodeType);
+      // oldVnode存在
+      const isRealElement = isDef(oldVnode.nodeType);
       if (!isRealElement && sameVnode(oldVnode, vnode)) {
+        // oldVnode 是真实的dom节点 并且 新旧vnode相同
         // patch existing root node
         patchVnode(oldVnode, vnode, insertedVnodeQueue, null, null, removeOnly);
       } else {

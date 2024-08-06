@@ -1,12 +1,22 @@
 import Vue from "vue";
 import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-
+// import router from "./router";
+// import store from "./store";
+console.log(App);
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount("#app");
+const app = new Vue({
+  // router,
+  // store,
+  data() {
+    return {
+      id: "Blag for root app",
+    };
+  },
+  render: (h) => {
+    const vnode = h(App);
+    return vnode;
+  },
+});
+
+app.$mount("#app");

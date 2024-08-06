@@ -14,8 +14,8 @@
 })(this, function () {
   "use strict";
 
-  var emptyObject = Object.freeze({});
-  var isArray = Array.isArray;
+  let emptyObject = Object.freeze({});
+  let isArray = Array.isArray;
   // These helpers produce better VM code in JS engines due to their
   // explicitness and function inlining.
   function isUndef(v) {
@@ -56,7 +56,7 @@
   /**
    * Get the raw type string of a value, e.g., [object Object].
    */
-  var _toString = Object.prototype.toString;
+  let _toString = Object.prototype.toString;
   function toRawType(value) {
     return _toString.call(value).slice(8, -1);
   }
@@ -74,7 +74,7 @@
    * Check if val is a valid array index.
    */
   function isValidArrayIndex(val) {
-    var n = parseFloat(String(val));
+    let n = parseFloat(String(val));
     return n >= 0 && Math.floor(n) === n && isFinite(val);
   }
   function isPromise(val) {
@@ -106,7 +106,7 @@
    * If the conversion fails, return original string.
    */
   function toNumber(val) {
-    var n = parseFloat(val);
+    let n = parseFloat(val);
     return isNaN(n) ? val : n;
   }
   /**
@@ -114,9 +114,9 @@
    * is in that map.
    */
   function makeMap(str, expectsLowerCase) {
-    var map = Object.create(null);
-    var list = str.split(",");
-    for (var i = 0; i < list.length; i++) {
+    let map = Object.create(null);
+    let list = str.split(",");
+    for (let i = 0; i < list.length; i++) {
       map[list[i]] = true;
     }
     return expectsLowerCase
@@ -130,23 +130,23 @@
   /**
    * Check if a tag is a built-in tag.
    */
-  var isBuiltInTag = makeMap("slot,component", true);
+  let isBuiltInTag = makeMap("slot,component", true);
   /**
    * Check if an attribute is a reserved attribute.
    */
-  var isReservedAttribute = makeMap("key,ref,slot,slot-scope,is");
+  let isReservedAttribute = makeMap("key,ref,slot,slot-scope,is");
   /**
    * Remove an item from an array.
    */
   function remove$2(arr, item) {
-    var len = arr.length;
+    let len = arr.length;
     if (len) {
       // fast path for the only / last item
       if (item === arr[len - 1]) {
         arr.length = len - 1;
         return;
       }
-      var index = arr.indexOf(item);
+      let index = arr.indexOf(item);
       if (index > -1) {
         return arr.splice(index, 1);
       }
@@ -155,7 +155,7 @@
   /**
    * Check whether an object has the property.
    */
-  var hasOwnProperty = Object.prototype.hasOwnProperty;
+  let hasOwnProperty = Object.prototype.hasOwnProperty;
   function hasOwn(obj, key) {
     return hasOwnProperty.call(obj, key);
   }
@@ -163,17 +163,17 @@
    * Create a cached version of a pure function.
    */
   function cached(fn) {
-    var cache = Object.create(null);
+    let cache = Object.create(null);
     return function cachedFn(str) {
-      var hit = cache[str];
+      let hit = cache[str];
       return hit || (cache[str] = fn(str));
     };
   }
   /**
    * Camelize a hyphen-delimited string.
    */
-  var camelizeRE = /-(\w)/g;
-  var camelize = cached(function (str) {
+  let camelizeRE = /-(\w)/g;
+  let camelize = cached(function (str) {
     return str.replace(camelizeRE, function (_, c) {
       return c ? c.toUpperCase() : "";
     });
@@ -181,14 +181,14 @@
   /**
    * Capitalize a string.
    */
-  var capitalize = cached(function (str) {
+  let capitalize = cached(function (str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   });
   /**
    * Hyphenate a camelCase string.
    */
-  var hyphenateRE = /\B([A-Z])/g;
-  var hyphenate = cached(function (str) {
+  let hyphenateRE = /\B([A-Z])/g;
+  let hyphenate = cached(function (str) {
     return str.replace(hyphenateRE, "-$1").toLowerCase();
   });
   /**
@@ -201,7 +201,7 @@
   /* istanbul ignore next */
   function polyfillBind(fn, ctx) {
     function boundFn(a) {
-      var l = arguments.length;
+      let l = arguments.length;
       return l
         ? l > 1
           ? fn.apply(ctx, arguments)
@@ -215,14 +215,14 @@
     return fn.bind(ctx);
   }
   // @ts-expect-error bind cannot be `undefined`
-  var bind = Function.prototype.bind ? nativeBind : polyfillBind;
+  let bind = Function.prototype.bind ? nativeBind : polyfillBind;
   /**
    * Convert an Array-like object to a real Array.
    */
   function toArray(list, start) {
     start = start || 0;
-    var i = list.length - start;
-    var ret = new Array(i);
+    let i = list.length - start;
+    let ret = new Array(i);
     while (i--) {
       ret[i] = list[i + start];
     }
