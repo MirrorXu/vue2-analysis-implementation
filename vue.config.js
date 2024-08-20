@@ -1,17 +1,20 @@
 const { defineConfig } = require("@vue/cli-service");
-const path = require("node:path");
-
+const path = require("path");
+const resolve = (p) => path.resolve(__dirname, p);
 module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
     resolve: {
-      // extension:[], //内部已默认配置
       alias: {
-        // vue$: path.resolve(__dirname, "vue/src/platforms/web/entry-runtime.ts"),
-        // shared: path.resolve(__dirname, "vue/src/shared"),
-        // v3: path.resolve(__dirname, "vue/src/v3"),
-        vue$: path.resolve(__dirname, "./vue/dist/vue.runtime.esm.js"),
+        vue$: resolve("./vue/dist/vue.runtime.esm.js"),
+        "vue-router$": resolve("./vue-router/dist/vue-router.esm.js"),
       },
+      // alias: {
+      //   vue$: path.resolve(__dirname, "vue/src/platforms/web/entry-runtime.ts"),
+      //   runtime: path.resolve(__dirname, "vue/src/platforms/web/runtime"),
+      //   shared: path.resolve(__dirname, "vue/src/shared"),
+      //   v3: path.resolve(__dirname, "vue/src/v3"),
+      // },
     },
   },
 });

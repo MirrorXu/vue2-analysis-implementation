@@ -1,12 +1,13 @@
 import Vue from "vue";
 import App from "./App.vue";
-// import router from "./router";
+import router from "./router";
 // import store from "./store";
+import "../async";
 console.log(App);
 Vue.config.productionTip = false;
 
 const app = new Vue({
-  // router,
+  router,
   // store,
   data() {
     return {
