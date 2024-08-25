@@ -1,10 +1,11 @@
 <script>
 export default {
-  name: "User",
+  name: "UserId",
   props: {
     name: {
       type: String,
-      required: true,
+      default: "",
+      // required: true,
     },
     gender: {
       type: Number,
@@ -21,14 +22,32 @@ export default {
       return gender > 1 ? "男" : "女";
     },
   },
+
+  data() {
+    return {
+      id: "",
+    };
+  },
+  mounted() {
+    console.log(this.$route);
+    this.id = this.$route.params.id;
+  },
+  methods: {
+    handlePush() {
+      debugger;
+      this.$router.push({ path: "/about" });
+    },
+  },
 };
 </script>
 
 <template>
   <div class="User">
+    {{ id }}
     <div>{{ name }}</div>
     <div v-if="gender">{{ c_gender }}</div>
     <img v-if="avatar" :src="avatar" alt="用户头像" />
+    <button @click="handlePush">跳转到/about</button>
   </div>
 </template>
 

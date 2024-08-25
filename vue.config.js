@@ -7,8 +7,7 @@ module.exports = defineConfig({
     resolve: {
       alias: {
         vue$: resolve("./vue/dist/vue.runtime.esm.js"),
-        // "vue-router$": resolve("./vue-router/dist/vue-router.esm.js"),
-        "vue-router$": resolve("./router/index.js"),
+        "vue-router$": resolve("./vue-router/dist/vue-router.esm.js"),
       },
       // alias: {
       //   vue$: path.resolve(__dirname, "vue/src/platforms/web/entry-runtime.ts"),

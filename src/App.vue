@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <User
-      :name="username"
-      :gender="userGender"
-      :avatar="userAvatar"
-      @click.native="changeName"
-    ></User>
+    <h1>app</h1>
+    <router-view />
+    <!--    <User-->
+    <!--      :name="username"-->
+    <!--      :gender="userGender"-->
+    <!--      :avatar="userAvatar"-->
+    <!--      @click.native="changeName"-->
+    <!--    ></User>-->
   </div>
 </template>
 
@@ -33,11 +35,11 @@ nav {
 </style>
 <script>
 let num = 0;
-import User from "@/components/user.vue";
+// import User from "@/components/user.vue";
 export default {
   name: "App",
   components: {
-    User,
+    // User,
   },
   data() {
     return {
