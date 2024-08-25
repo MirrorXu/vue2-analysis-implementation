@@ -1,14 +1,11 @@
-/* @flow */
-
-export function assert (condition: any, message: string) {
+export function assert(condition, message) {
   if (!condition) {
-    throw new Error(`[vue-router] ${message}`)
+    throw new Error(`[vue-router] ${message}`);
   }
 }
 
-export function warn (condition: any, message: string) {
+export function warn(condition, message) {
   if (!condition) {
-    typeof console !== 'undefined' && console.warn(`[vue-router] ${message}`)
+    typeof console !== "undefined" && console.warn(`[vue-router] ${message}`);
   }
 }
-

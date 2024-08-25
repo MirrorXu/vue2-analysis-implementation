@@ -1,3 +1,2 @@
-import VueRouter from './entries/cjs'
-
-export default VueRouter
+import VueRouter from "./router";
+export default VueRouter;

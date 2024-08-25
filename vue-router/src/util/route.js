@@ -1,150 +1,140 @@
-/* @flow */
+import { stringifyQuery } from "./query";
 
-import type VueRouter from '../index'
-import { stringifyQuery } from './query'
+const trailingSlashRE = /\/?$/;
 
-const trailingSlashRE = /\/?$/
+export function createRoute(record, location, redirectedFrom, router) {
+  const stringifyQuery = router && router.options.stringifyQuery;
 
-export function createRoute (
-  record: ?RouteRecord,
-  location: Location,
-  redirectedFrom?: ?Location,
-  router?: VueRouter
-): Route {
-  const stringifyQuery = router && router.options.stringifyQuery
-
-  let query: any = location.query || {}
+  let query = location.query || {};
   try {
-    query = clone(query)
+    query = clone(query);
   } catch (e) {}
 
-  const route: Route = {
+  const route = {
     name: location.name || (record && record.name),
     meta: (record && record.meta) || {},
-    path: location.path || '/',
-    hash: location.hash || '',
+    path: location.path || "/",
+    hash: location.hash || "",
     query,
     params: location.params || {},
     fullPath: getFullPath(location, stringifyQuery),
-    matched: record ? formatMatch(record) : []
-  }
+    matched: record ? formatMatch(record) : [],
+  };
   if (redirectedFrom) {
-    route.redirectedFrom = getFullPath(redirectedFrom, stringifyQuery)
+    route.redirectedFrom = getFullPath(redirectedFrom, stringifyQuery);
   }
-  return Object.freeze(route)
+  return Object.freeze(route);
 }
 
-function clone (value) {
+function clone(value) {
   if (Array.isArray(value)) {
-    return value.map(clone)
-  } else if (value && typeof value === 'object') {
-    const res = {}
+    return value.map(clone);
+  } else if (value && typeof value === "object") {
+    const res = {};
     for (const key in value) {
-      res[key] = clone(value[key])
+      res[key] = clone(value[key]);
     }
-    return res
+    return res;
   } else {
-    return value
+    return value;
   }
 }
 
 // the starting route that represents the initial state
 export const START = createRoute(null, {
-  path: '/'
-})
+  path: "/",
+});
 
-function formatMatch (record: ?RouteRecord): Array<RouteRecord> {
-  const res = []
+function formatMatch(record) {
+  const res = [];
   while (record) {
-    res.unshift(record)
-    record = record.parent
+    res.unshift(record);
+    record = record.parent;
   }
-  return res
+  return res;
 }
 
-function getFullPath (
-  { path, query = {}, hash = '' },
-  _stringifyQuery
-): string {
-  const stringify = _stringifyQuery || stringifyQuery
-  return (path || '/') + stringify(query) + hash
+function getFullPath({ path, query = {}, hash = "" }, _stringifyQuery) {
+  const stringify = _stringifyQuery || stringifyQuery;
+  return (path || "/") + stringify(query) + hash;
 }
 
-export function isSameRoute (a: Route, b: ?Route, onlyPath: ?boolean): boolean {
+export function isSameRoute(a, b, onlyPath) {
   if (b === START) {
-    return a === b
+    return a === b;
   } else if (!b) {
-    return false
+    return false;
   } else if (a.path && b.path) {
-    return a.path.replace(trailingSlashRE, '') === b.path.replace(trailingSlashRE, '') && (onlyPath ||
-      a.hash === b.hash &&
-      isObjectEqual(a.query, b.query))
+    return (
+      a.path.replace(trailingSlashRE, "") ===
+        b.path.replace(trailingSlashRE, "") &&
+      (onlyPath || (a.hash === b.hash && isObjectEqual(a.query, b.query)))
+    );
   } else if (a.name && b.name) {
     return (
       a.name === b.name &&
-      (onlyPath || (
-        a.hash === b.hash &&
-      isObjectEqual(a.query, b.query) &&
-      isObjectEqual(a.params, b.params))
-      )
-    )
+      (onlyPath ||
+        (a.hash === b.hash &&
+          isObjectEqual(a.query, b.query) &&
+          isObjectEqual(a.params, b.params)))
+    );
   } else {
-    return false
+    return false;
   }
 }
 
-function isObjectEqual (a = {}, b = {}): boolean {
+function isObjectEqual(a = {}, b = {}) {
   // handle null value #1566
-  if (!a || !b) return a === b
-  const aKeys = Object.keys(a).sort()
-  const bKeys = Object.keys(b).sort()
+  if (!a || !b) return a === b;
+  const aKeys = Object.keys(a).sort();
+  const bKeys = Object.keys(b).sort();
   if (aKeys.length !== bKeys.length) {
-    return false
+    return false;
   }
   return aKeys.every((key, i) => {
-    const aVal = a[key]
-    const bKey = bKeys[i]
-    if (bKey !== key) return false
-    const bVal = b[key]
+    const aVal = a[key];
+    const bKey = bKeys[i];
+    if (bKey !== key) return false;
+    const bVal = b[key];
     // query values can be null and undefined
-    if (aVal == null || bVal == null) return aVal === bVal
+    if (aVal == null || bVal == null) return aVal === bVal;
     // check nested equality
-    if (typeof aVal === 'object' && typeof bVal === 'object') {
-      return isObjectEqual(aVal, bVal)
+    if (typeof aVal === "object" && typeof bVal === "object") {
+      return isObjectEqual(aVal, bVal);
     }
-    return String(aVal) === String(bVal)
-  })
+    return String(aVal) === String(bVal);
+  });
 }
 
-export function isIncludedRoute (current: Route, target: Route): boolean {
+export function isIncludedRoute(current, target) {
   return (
-    current.path.replace(trailingSlashRE, '/').indexOf(
-      target.path.replace(trailingSlashRE, '/')
-    ) === 0 &&
+    current.path
+      .replace(trailingSlashRE, "/")
+      .indexOf(target.path.replace(trailingSlashRE, "/")) === 0 &&
     (!target.hash || current.hash === target.hash) &&
     queryIncludes(current.query, target.query)
-  )
+  );
 }
 
-function queryIncludes (current: Dictionary<string>, target: Dictionary<string>): boolean {
+function queryIncludes(current, target) {
   for (const key in target) {
     if (!(key in current)) {
-      return false
+      return false;
     }
   }
-  return true
+  return true;
 }
 
-export function handleRouteEntered (route: Route) {
+export function handleRouteEntered(route) {
   for (let i = 0; i < route.matched.length; i++) {
-    const record = route.matched[i]
+    const record = route.matched[i];
     for (const name in record.instances) {
-      const instance = record.instances[name]
-      const cbs = record.enteredCbs[name]
-      if (!instance || !cbs) continue
-      delete record.enteredCbs[name]
+      const instance = record.instances[name];
+      const cbs = record.enteredCbs[name];
+      if (!instance || !cbs) continue;
+      delete record.enteredCbs[name];
       for (let i = 0; i < cbs.length; i++) {
-        if (!instance._isBeingDestroyed) cbs[i](instance)
+        if (!instance._isBeingDestroyed) cbs[i](instance);
       }
     }
   }

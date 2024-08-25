@@ -1,18 +1,16 @@
-/* @flow */
-
-export function runQueue (queue: Array<?NavigationGuard>, fn: Function, cb: Function) {
-  const step = index => {
+export function runQueue(queue, fn, cb) {
+  const step = (index) => {
     if (index >= queue.length) {
-      cb()
+      cb();
     } else {
       if (queue[index]) {
         fn(queue[index], () => {
-          step(index + 1)
-        })
+          step(index + 1);
+        });
       } else {
-        step(index + 1)
+        step(index + 1);
       }
     }
-  }
-  step(0)
+  };
+  step(0);
 }
